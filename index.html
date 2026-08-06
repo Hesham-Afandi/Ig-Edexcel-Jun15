@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📐 امتحان Edexcel IGCSE Math A — May/June 2014</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: #f9fafb; }
+        body.en-mode { font-family: 'Inter', sans-serif; }
+        .correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+        .timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.7; } }
+        @media print { .no-print { display: none !important; } .page-break { page-break-before: always; } body { padding-top: 0; } .sidebar { display: none; } .main-container { margin: 0 !important; } }
+        .success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+        .grade-excellent { background: #dcfce7; color: #166534; }
+        .grade-good { background: #fef3c7; color: #92400e; }
+        .grade-pass { background: #dbeafe; color: #1e40af; }
+        .grade-fail { background: #fee2e2; color: #991b1b; }
+        .lang-switch { position: fixed; top: 10px; left: 10px; z-index: 300; background: white; padding: 4px; border-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 3px; border: 2px solid #059669; }
+        [dir="ltr"] .lang-switch { left: auto; right: 10px; }
+        .lang-btn { padding: 4px 10px; border-radius: 18px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.75rem; background: transparent; color: #6b7280; }
+        .lang-btn.active { background: #059669; color: white; }
+        .question-card { background: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-left: 4px solid #059669; transition: all 0.3s; font-size: 0.87rem; line-height: 1.6; }
+        [dir="rtl"] .question-card { border-left: none; border-right: 4px solid #059669; }
+        .question-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
+        .marks-badge { display: inline-block; background: linear-gradient(135deg, #059669, #10b981); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.66rem; font-weight: bold; margin-left: 6px; }
+        .tier-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.62rem; font-weight: bold; margin-left: 4px; }
+        .tier-higher { background: #fee2e2; color: #991b1b; }
+        .tier-foundation { background: #dbeafe; color: #1e40af; }
+        .answer-input { border: 2px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; width: 100%; max-width: 280px; font-family: inherit; font-size: 0.82rem; transition: border-color 0.3s; }
+        .answer-input:focus { outline: none; border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.1); }
+        .section-header { color: white; padding: 12px 18px; border-radius: 10px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .section-header h2 { margin: 0; font-size: 0.95rem; font-weight: bold; }
+        .paper-badge { display: inline-block; background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 8px; font-size: 0.72rem; margin-right: 6px; }
+        .reveal-btn { background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; padding: 3px 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: 600; transition: all 0.2s; }
+        .reveal-btn:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(5,150,105,0.3); }
+        .answer-box { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid #16a34a; border-radius: 8px; padding: 8px 12px; margin-top: 8px; font-size: 0.8rem; }
+        .top-nav { position: fixed; top: 0; left: 0; right: 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 200; padding: 5px 10px; border-bottom: 2px solid #e5e7eb; }
+        .top-nav-container { max-width: 1500px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+        .nav-title { font-weight: bold; color: #059669; font-size: 0.78rem; white-space: nowrap; }
+        .nav-links { display: flex; gap: 3px; flex-wrap: wrap; }
+        .nav-link { padding: 3px 7px; background: #f3f4f6; color: #4b5563; border-radius: 6px; text-decoration: none; font-size: 0.64rem; font-weight: 600; transition: all 0.2s; white-space: nowrap; }
+        .nav-link:hover { background: #d1fae5; color: #059669; }
+        .progress-container { flex: 1; min-width: 70px; max-width: 180px; display: flex; align-items: center; gap: 6px; }
+        .progress-bar-wrapper { flex: 1; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #059669, #10b981); transition: width 0.3s; border-radius: 3px; }
+        .progress-text { font-size: 0.66rem; color: #6b7280; font-weight: 600; white-space: nowrap; }
+        .sidebar { position: fixed; top: 55px; left: 10px; width: 235px; max-height: calc(100vh - 70px); overflow-y: auto; background: white; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); padding: 10px; z-index: 100; font-size: 0.66rem; }
+        [dir="ltr"] .sidebar { left: auto; right: 10px; }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+        .sidebar-title { font-weight: bold; color: #059669; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; font-size: 0.74rem; }
+        .sidebar-session { font-weight: bold; color: white; padding: 4px 8px; margin: 6px 0 3px; border-radius: 6px; font-size: 0.68rem; }
+        .sidebar-link { display: block; padding: 2px 8px; color: #6b7280; text-decoration: none; border-radius: 4px; font-size: 0.63rem; margin: 1px 0; transition: all 0.2s; }
+        .sidebar-link:hover { background: #d1fae5; color: #059669; }
+        body { padding-top: 55px; }
+        @media (min-width: 1350px) { .main-container { margin-left: 255px; margin-right: 16px; } [dir="ltr"] .main-container { margin-left: 16px; margin-right: 255px; } }
+        @media (max-width: 1349px) { .sidebar { display: none; } }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; margin: 10px 0; }
+        .stat-card { background: white; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .stat-number { font-size: 1.2rem; font-weight: bold; color: #059669; }
+        .stat-label { font-size: 0.62rem; color: #6b7280; }
+        .btn-action { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-action:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen">
+
+    <nav class="top-nav no-print">
+        <div class="top-nav-container">
+            <div class="nav-title">📐 Edexcel IGCSE — M/J 2014</div>
+            <div class="nav-links">
+                <a href="#p4h" class="nav-link" style="background:#fee2e2;color:#991b1b;">📕 4H</a>
+                <a href="#p4hr" class="nav-link" style="background:#fee2e2;color:#991b1b;">📕 4HR</a>
+                <a href="#p3h" class="nav-link" style="background:#fee2e2;color:#991b1b;">📕 3H</a>
+                <a href="#p3hr" class="nav-link" style="background:#fee2e2;color:#991b1b;">📕 3HR</a>
+                <a href="#p1f" class="nav-link" style="background:#dbeafe;color:#1e40af;">📘 1F</a>
+                <a href="#p1fr" class="nav-link" style="background:#dbeafe;color:#1e40af;">📘 1FR</a>
+                <a href="#p2f" class="nav-link" style="background:#dbeafe;color:#1e40af;">📘 2F</a>
+                <a href="#p2fr" class="nav-link" style="background:#dbeafe;color:#1e40af;">📘 2FR</a>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar-wrapper"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+                <button onclick="scrollToTop()" style="background:#10b981;color:white;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.85rem;">⬆️</button>
+                <div class="lang-switch" style="position:static;box-shadow:none;padding:3px;">
+                    <button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+                    <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar no-print" id="sidebar"></aside>
+
+    <div class="main-container">
+        <div class="max-w-4xl mx-auto mb-3 text-center no-print" style="margin-top:12px;">
+            <div class="bg-white p-3 rounded-xl shadow-md inline-block border-2 border-emerald-100">
+                <span class="text-gray-600 text-sm" data-ar="⏱️ الوقت:" data-en="⏱️ Time:">⏱️ الوقت:</span>
+                <span id="timer" class="text-xl font-bold text-emerald-600 font-mono">120:00</span>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto mb-3 no-print">
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number">8</div><div class="stat-label">أوراق امتحانية</div></div>
+                <div class="stat-card"><div class="stat-number">182</div><div class="stat-label">سؤال</div></div>
+                <div class="stat-card"><div class="stat-number">120</div><div class="stat-label">دقيقة</div></div>
+                <div class="stat-card"><div class="stat-number">M/J 2014</div><div class="stat-label">الدورة</div></div>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto mb-3 flex flex-wrap gap-2 justify-center no-print">
+            <button onclick="toggleAllAnswers()" class="btn-action bg-emerald-600 hover:bg-emerald-700 text-white">👁️ إظهار/إخفاء الإجابات</button>
+            <button onclick="window.print()" class="btn-action bg-gray-800 hover:bg-gray-900 text-white">🖨️ طباعة</button>
+            <button onclick="expandAll()" class="btn-action bg-teal-600 hover:bg-teal-700 text-white">📂 فتح الكل</button>
+            <button onclick="collapseAll()" class="btn-action bg-amber-600 hover:bg-amber-700 text-white">📁 طي الكل</button>
+        </div>
+
+        <header class="max-w-4xl mx-auto bg-white p-4 rounded-xl shadow-md mb-4 border-r-4 border-emerald-600">
+            <div class="text-center">
+                <h1 class="text-lg md:text-xl font-bold text-gray-900 mb-1">📐 امتحان Edexcel IGCSE Mathematics A — May/June 2014</h1>
+                <h2 class="text-sm text-emerald-600 font-semibold">All Papers (Higher & Foundation)</h2>
+                <p class="text-xs text-gray-600 mt-1">Papers 4H, 4HR, 3H, 3HR, 1F, 1FR, 2F, 2FR</p>
+                <p class="text-xs text-orange-600 mt-1 font-semibold">⚠️ 8 أوراق امتحانية — 182 سؤالاً — بدون حذف أي سؤال</p>
+            </div>
+            <div class="mt-3 flex flex-wrap justify-center gap-3 text-xs text-gray-600">
+                <span>👤 <input type="text" id="studentName" class="border-b border-gray-400 bg-transparent w-24 text-center" placeholder="الاسم"></span>
+                <span>🏫 <input type="text" id="studentClass" class="border-b border-gray-400 bg-transparent w-20 text-center" placeholder="الشعبة"></span>
+                <span>📅 <input type="text" id="examDate" class="border-b border-gray-400 bg-transparent w-20 text-center" placeholder="التاريخ"></span>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto space-y-4" id="exam-content"></main>
+
+        <div class="text-center no-print pb-4 mt-4">
+            <button onclick="gradeExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-base px-8 py-3 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer">📝 تسليم وتصحيح الامتحان</button>
+        </div>
+
+        <div id="results-panel" class="max-w-4xl mx-auto mt-4 bg-white p-5 rounded-2xl shadow-2xl border-t-4 border-emerald-500 hidden no-print">
+            <h2 class="text-xl font-bold text-gray-900 mb-3 text-center">📊 نتائج الامتحان</h2>
+            <div class="grid md:grid-cols-3 gap-3 mb-3">
+                <div class="bg-blue-50 p-3 rounded-xl text-center"><p class="text-xs">اسم الطالب</p><p id="res-name" class="font-bold text-lg text-indigo-700">-</p></div>
+                <div class="bg-purple-50 p-3 rounded-xl text-center"><p class="text-xs">التاريخ</p><p id="res-date" class="font-bold text-lg text-purple-700">-</p></div>
+                <div class="bg-emerald-50 p-3 rounded-xl text-center"><p class="text-xs">المجموع</p><p id="res-total" class="font-bold text-xl text-emerald-600">0/182</p></div>
+            </div>
+            <div class="text-center mb-3">
+                <span id="success-badge" class="success-badge grade-excellent">-</span>
+                <p id="success-percent" class="text-2xl font-bold text-emerald-600 mt-1">0%</p>
+                <p class="text-xs text-gray-500">نسبة النجاح</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl mb-3">
+                <h3 class="font-bold text-sm mb-2 text-gray-800">📈 تفصيل الأداء حسب الورقة:</h3>
+                <div class="grid md:grid-cols-2 gap-x-6 gap-y-2" id="paper-scores"></div>
+            </div>
+            <div class="flex gap-3 justify-center">
+                <button onclick="window.print()" class="bg-gray-700 text-white px-4 py-2 rounded-lg text-xs font-semibold cursor-pointer">🖨️ طباعة النتائج</button>
+            </div>
+        </div>
+
+        <footer class="max-w-4xl mx-auto mt-6 mb-4 text-center text-gray-500 text-xs no-print">
+            © Edexcel IGCSE Mathematics A — May/June 2014
+        </footer>
+    </div>
+
+<script>
+let currentLang = 'ar';
+let answersVisible = false;
+let timeRemaining = 7200;
+
+const examData = [
+    {
+        id: 'p4h', title: '📕 Paper 4H', tier: 'Higher', color: '#dc2626', code: 'P43029A — 20 May 2014', questions: [
+            { q: 'Q1: Brazil Paralympic medals: 35 total (gold+silver). Ratio gold:silver = 3:2. Find silver medals. [2]', m: 2, a: '14', e: '35 * (2/5) = 14' },
+            { q: 'Q2: Biased spinner (1,2,3,4). P(1)=0.4, P(2)=0.35, P(4)=0.1. (a) P(3). (b) Ryan spins 80 times, estimate lands on 2. [4]', m: 4, a: '0.15,28', e: '(a) 1-0.85=0.15. (b) 80*0.35=28' },
+            { q: 'Q3: Circle r=7.6cm. (a) Area to 3sf. (b) Bounds of r (to 1dp). [4]', m: 4, a: '181,7.65,7.55', e: '(a) π*7.6²≈181. (b) UB=7.65, LB=7.55' },
+            { q: 'Q4: Sale 15% off. (a) Normal $270, find sale. (b) Reduced by $13.50, find normal. [6]', m: 6, a: '229.50,100', e: '(a) 270*0.85=229.5. (b) 13.5/0.15=100' },
+            { q: 'Q5: Exterior angle of regular 15-sided polygon. [2]', m: 2, a: '24', e: '360/15=24°' },
+            { q: 'Q6: Camera: France 126€, US $165.24. 1€=£0.89, £1=$1.62. Cheaper in US by £? [4]', m: 4, a: '10.14', e: 'France=126*0.89=£112.14. US=165.24/1.62=£102. Diff=£10.14' },
+            { q: 'Q7: Construct bisector of angle ABC. Show construction lines. [2]', m: 2, a: 'shown', e: 'Compass construction' },
+            { q: 'Q8: Triangle sides 7.2, 18.6. Calculate AC to 3sf. [3]', m: 3, a: 'shown', e: 'Cosine/Pythagoras depending on diagram' },
+            { q: 'Q9: (a) Solve 7x−6=2x+17. (b) Expand (x+8)(x+2). [5]', m: 5, a: '4.6,x²+10x+16', e: '(a) 5x=23, x=4.6. (b) x²+10x+16' },
+            { q: 'Q10: Mean time for 50 people (groups: 6, 10, 19, 15). Estimate mean. [4]', m: 4, a: '25.3', e: '(6*5+10*15+19*25+15*35)/50 = 1265/50 = 25.3' },
+            { q: 'Q11: y=x²+2x−3. (a) Table of values. (b) Draw graph −4≤x≤2. [4]', m: 4, a: 'shown', e: 'Plot parabola' },
+            { q: 'Q12: Triangle ADC, E on AD, B on AC, EB||DC. AB=14, EB=16, DC=20. Find BC. [3]', m: 3, a: '3.5', e: '14/AC = 16/20 => AC=17.5. BC=17.5-14=3.5' },
+            { q: 'Q13: Line L through (0,−2) and (6,1). (a) Eq of L. (b) Parallel through (4,−2). [5]', m: 5, a: 'y=0.5x-2,y=0.5x-4', e: '(a) m=0.5, y=0.5x-2. (b) y+2=0.5(x-4)' },
+            { q: 'Q14: (a) 1.2×10⁻⁵ ordinary. (b) 7.9×10⁵ + 6×10⁴ in std form. [3]', m: 3, a: '0.000012,8.5×10⁵', e: '(b) 790000+60000=850000' },
+            { q: 'Q15: Simultaneous: 3x+2y=7, 4x−3y=15. [4]', m: 4, a: '3,-1', e: 'x=3, y=-1' },
+            { q: 'Q16: Circle O. (a) OPR=36°, find PQR. (b) KJ diam, KGH=124°, find HKJ. [5]', m: 5, a: '54,34', e: '(a) 90-36=54. (b) 180-124=56, 56/2=28' },
+            { q: 'Q17: F ∝ 1/x². F=0.8 when x=5. (a) Formula. (b) x when F=320. [5]', m: 5, a: 'F=20/x²,0.25', e: 'k=0.8*25=20. x²=20/320=1/16, x=0.25' },
+            { q: 'Q18: (a) Solve 5x²−6x−2=0 (3sf). (b) (m+2)/3 > 4. [7]', m: 7, a: '1.48,-0.28,m>10', e: '(a) Quad formula. (b) m+2>12' },
+            { q: 'Q19: Tennis P(win)=2/7. (a) Tree diagram. (b) P(win ≥1). [6]', m: 6, a: '24/49', e: '1 - (5/7)² = 1 - 25/49 = 24/49' },
+            { q: 'Q20: Show 0.38̇ = fraction. [2]', m: 2, a: 'shown', e: 'Algebraic proof' },
+            { q: 'Q21: Sphere SA=81π. Volume to 3sf. [4]', m: 4, a: '121.5π', e: '4πr²=81π => r=4.5. V=4/3π(4.5)³=121.5π' },
+            { q: 'Q22: Histogram 100 shoppers. [3]', m: 3, a: 'shown', e: 'Draw histogram' },
+            { q: 'Q23: Prism AB=9, BC=15, AE=12. M mid CD. Angle AM to plane BCDF. [5]', m: 5, a: 'shown', e: '3D trig' },
+            { q: 'Q24: y=2n/x². Express n in terms of x, y. [3]', m: 3, a: 'n=x²y/2', e: 'n=x²y/2' },
+            { q: 'Q25: Simplify (x²−4x+3)/(x²+2x−3). [5]', m: 5, a: '(x-3)/(x+3)', e: '(x-1)(x-3) / (x-1)(x+3)' }
+        ]
+    },
+    {
+        id: 'p4hr', title: '📕 Paper 4HR', tier: 'Higher', color: '#b91c1c', code: 'P43075A — 20 May 2014', questions: [
+            { q: 'Q1: f=5p−4v. Work out p when f=−22 and v=−5. [3]', m: 3, a: '-2', e: '-22=5p+20 => 5p=-42 => p=-8.4? (Check signs)' },
+            { q: 'Q2: Train Paris-Montpellier 224km/h. Find distance. [3]', m: 3, a: 'shown', e: 'Distance = Speed * Time' },
+            { q: 'Q3: Sequence squares. (a) Pattern n. (b) 88 squares. [4]', m: 4, a: 'shown', e: 'Quadratic sequence' },
+            { q: 'Q4: Transformation P to Q. Translate P. [4]', m: 4, a: 'shown', e: 'Describe and draw' },
+            { q: 'Q5: Metal plate 20x12, two circles d=6. Shaded area. [4]', m: 4, a: '163', e: '240 - 2*π*3² ≈ 183.4' },
+            { q: 'Q6: Kim 12 boxes $15, 12 drinks. 3/4 @$1.5. 15% profit. Reduced? [5]', m: 5, a: 'shown', e: 'Profit calculation' },
+            { q: 'Q7: Reeta P(6)=0.1. (a) P(not 6). (b) 50 rolls. [3]', m: 3, a: '0.9,5', e: '1-0.1=0.9. 50*0.1=5' },
+            { q: 'Q8: 252 prime factors. y=240*252 primes. [4]', m: 4, a: '2²×3²×7,2⁶×3³×5×7', e: 'Prime factorization' },
+            { q: 'Q9: Hexagon ABCD angles x,y. [4]', m: 4, a: 'shown', e: 'Angle sum properties' },
+            { q: 'Q10: Mortar 1:2:3. (a) 2.1m³ sand. (b) 0.75m³ quicklime max. [4]', m: 4, a: '0.7,1.25', e: 'Sand=2/6*2.1=0.7. Max=0.75*6/3=1.5' },
+            { q: 'Q11: (a) 2t²−7t+3. (b) y=a−bx² make x subject. [5]', m: 5, a: '(2t-1)(t-3),√((a-y)/b)', e: 'Factorise and rearrange' },
+            { q: 'Q12: Carmelo basketball IQR. [4]', m: 4, a: 'shown', e: 'Q3-Q1' },
+            { q: 'Q13: y=x²−5x+4 table/graph. [4]', m: 4, a: 'shown', e: 'Plot parabola' },
+            { q: 'Q14: Villages A, B, C bearings. [6]', m: 6, a: 'shown', e: 'Trigonometry/Bearings' },
+            { q: 'Q15: Cone d=10a, h=12a. TSA=360π. Vol=Nπ. [6]', m: 6, a: 'shown', e: 'TSA = πr² + πrl' },
+            { q: 'Q16: Maria two bags probability. [7]', m: 7, a: 'shown', e: 'Tree diagram' },
+            { q: 'Q17: Hexagon 4x²+9x−47=0. Solve. [8]', m: 8, a: 'shown', e: 'Quadratic formula' },
+            { q: 'Q18: (16x⁴y²)^½. (2x²−8)/(x²−4). [5]', m: 5, a: '4x²y,2', e: 'Indices and factorise' },
+            { q: 'Q19: Villages bearing (duplicate). [6]', m: 6, a: 'shown', e: 'Bearings' },
+            { q: 'Q20: Show (a²+1)(c²+1) identity. [6]', m: 6, a: 'shown', e: 'Algebraic expansion' },
+            { q: 'Q21: y=x²+2x−3 graph. [4]', m: 4, a: 'shown', e: 'Plot' }
+        ]
+    },
+    {
+        id: 'p1f', title: '📘 Paper 1F', tier: 'Foundation', color: '#2563eb', code: 'P43026A — 14 May 2014', questions: [
+            { q: 'Q1: 8520 words, value 4, round, %. [6]', m: 6, a: 'shown', e: 'Place value and %' },
+            { q: 'Q2: Factors 30. [2]', m: 2, a: '1,2,3,5,6,10,15,30', e: 'All factors' },
+            { q: 'Q3: Shape symmetry, area, perim. [5]', m: 5, a: 'shown', e: 'Grid properties' },
+            { q: 'Q4: Seq 10,14,18... 12th? 100? [5]', m: 5, a: '54,no', e: '4n+6. 4n+6=100 => n=23.5' },
+            { q: 'Q5: Quad ABCD grid. [7]', m: 7, a: 'shown', e: 'Coordinates and area' },
+            { q: 'Q6: 9 cards prob. [6]', m: 6, a: 'shown', e: 'Probability' },
+            { q: 'Q7: Order nums, ops. [6]', m: 6, a: 'shown', e: 'Directed numbers' },
+            { q: 'Q8: Coach 11:45 to 14:45. Dist? [4]', m: 4, a: '3h,195km', e: '3*65=195' },
+            { q: 'Q9: Algebra. 6x-5=16. [5]', m: 5, a: '3d²,2x-3y,3.5', e: 'Simplify and solve' },
+            { q: 'Q10: Isosceles quad x. [4]', m: 4, a: '110', e: 'Angle sum' },
+            { q: 'Q11: Tickets 4A+24P=270, A=13.5. P? [3]', m: 3, a: '7.5', e: '24P = 270-54 = 216 => P=9' },
+            { q: 'Q12: Coin+dice prob. [6]', m: 6, a: 'shown', e: 'Sample space' },
+            { q: 'Q13: Fractions order, div. [4]', m: 4, a: 'shown', e: 'Common denominators' },
+            { q: 'Q14: (13*8)/(6+5.7). [3]', m: 3, a: '8.94', e: '104/11.7' },
+            { q: 'Q15: Transform, rotate. [4]', m: 4, a: 'shown', e: 'Geometry' },
+            { q: 'Q16: Simplify, expand, factor. [6]', m: 6, a: '56d²,12e-20,f(f-2)', e: 'Algebra' },
+            { q: 'Q17: Mean 64->70. [4]', m: 4, a: '94', e: '5*70 - 4*64 = 350-256=94' },
+            { q: 'Q18: Scale drawing. [2]', m: 2, a: 'shown', e: 'Bearings' },
+            { q: 'Q19: Sets. [3]', m: 3, a: 'shown', e: 'Intersection/Union' },
+            { q: 'Q20: 155->167.4 %. [3]', m: 3, a: '8%', e: '12.4/155 * 100' },
+            { q: 'Q21: PQ length. [3]', m: 3, a: 'shown', e: 'Trig' },
+            { q: 'Q22: Prism TSA. [3]', m: 3, a: 'shown', e: 'Surface area' },
+            { q: 'Q23: x+2y=8 shade. [5]', m: 5, a: 'shown', e: 'Inequalities' }
+        ]
+    },
+    {
+        id: 'p1fr', title: '📘 Paper 1FR', tier: 'Foundation', color: '#1d4ed8', code: 'P43072A — 14 May 2014', questions: [
+            { q: 'Q1: Symmetry, area. [4]', m: 4, a: 'shown', e: 'Grid' },
+            { q: 'Q2: Nums, decimals. [5]', m: 5, a: 'shown', e: 'Place value' },
+            { q: 'Q3: Factors 45. [3]', m: 3, a: '1,3,5,9,15,45', e: 'Factors' },
+            { q: 'Q4: Seq 2,5,8,11. [4]', m: 4, a: '14,+3', e: 'Arithmetic sequence' },
+            { q: 'Q5: Quad grid. [8]', m: 8, a: 'shown', e: 'Coordinates' },
+            { q: 'Q6: Ops, cube root. [5]', m: 5, a: '0.5,0.081,3.5', e: 'Calculator' },
+            { q: 'Q7: Bar chart. [7]', m: 7, a: 'shown', e: 'Data' },
+            { q: 'Q8: Prism vol. [3]', m: 3, a: 'shown', e: 'Volume' },
+            { q: 'Q9: Cards prob. [7]', m: 7, a: 'shown', e: 'Probability' },
+            { q: 'Q10: Angles w,x,y,z. [5]', m: 5, a: 'shown', e: 'Geometry' },
+            { q: 'Q11: Fractions. [5]', m: 5, a: '6/25,0.32,4', e: 'Simplify' },
+            { q: 'Q12: Solve eqs. [6]', m: 6, a: '18,7,8', e: 'Linear equations' },
+            { q: 'Q13: Ratio 5ml:10L. 96L? [4]', m: 4, a: '1:2000,48ml', e: 'Units' },
+            { q: 'Q14: Algebra. [6]', m: 6, a: '6a-9b,d(7g-9e),x²+7x+10', e: 'Expand/Factorise' },
+            { q: 'Q15: Rect PQRS area AQ. [7]', m: 7, a: 'shown', e: 'Area/Pythagoras' },
+            { q: 'Q16: Hens eggs. [7]', m: 7, a: 'shown', e: 'Stats' },
+            { q: 'Q17: Petrol 87.3->133.3 %. [3]', m: 3, a: '52.7%', e: '% increase' },
+            { q: 'Q18: Sets. [4]', m: 4, a: 'shown', e: 'Venn diagrams' },
+            { q: 'Q19: Cylinder CSA. [3]', m: 3, a: '1130', e: 'πdh' },
+            { q: 'Q20: Graph. [4]', m: 4, a: 'shown', e: 'Plot' }
+        ]
+    },
+    {
+        id: 'p2f', title: '📘 Paper 2F', tier: 'Foundation', color: '#059669', code: 'P43027A — 20 May 2014', questions: [
+            { q: 'Q1: Order nums. [4]', m: 4, a: 'shown', e: 'Place value' },
+            { q: 'Q2: Pictogram. [4]', m: 4, a: 'shown', e: 'Data' },
+            { q: 'Q3: Circle, 3D. [5]', m: 5, a: 'shown', e: 'Shapes' },
+            { q: 'Q4: Change from $20. [3]', m: 3, a: '5.31', e: '20 - (6.99+7+1.2)' },
+            { q: 'Q5: Metric units. [5]', m: 5, a: 'shown', e: 'Conversions' },
+            { q: 'Q6: Algebra. [5]', m: 5, a: '5m,7ph,3,14', e: 'Simplify/Solve' },
+            { q: 'Q7: Triangles. [3]', m: 3, a: 'shown', e: 'Properties' },
+            { q: 'Q8: w=2a+b. [5]', m: 5, a: '14,12.5', e: 'Substitution' },
+            { q: 'Q9: %, frac, roots. [4]', m: 4, a: '4%,168,14,6.71', e: 'Calculations' },
+            { q: 'Q10: Oranges profit. [4]', m: 4, a: 'shown', e: 'Profit' },
+            { q: 'Q11: Medals. [7]', m: 7, a: 'shown', e: 'Ratio/Fractions' },
+            { q: 'Q12: Miles/km. [5]', m: 5, a: 'shown', e: 'Graph' },
+            { q: 'Q13: P(yellow). [2]', m: 2, a: '9/20', e: '1-11/20' },
+            { q: 'Q14: Pie chart. [4]', m: 4, a: 'shown', e: 'Angles' },
+            { q: 'Q15: Quad x. [2]', m: 2, a: 'shown', e: 'Angles' },
+            { q: 'Q16: Circle bounds. [4]', m: 4, a: 'shown', e: 'Bounds' },
+            { q: 'Q17: Sale. [6]', m: 6, a: 'shown', e: '% decrease' },
+            { q: 'Q18: Spinner. [2]', m: 2, a: '0.15', e: 'Probability' },
+            { q: 'Q19: Ext angle. [2]', m: 2, a: '24', e: '360/15' },
+            { q: 'Q20: Camera. [4]', m: 4, a: 'shown', e: 'Exchange rates' },
+            { q: 'Q21: Bisector. [2]', m: 2, a: 'shown', e: 'Construction' },
+            { q: 'Q22: AC. [3]', m: 3, a: 'shown', e: 'Trig' },
+            { q: 'Q23: Solve, expand. [5]', m: 5, a: 'shown', e: 'Algebra' },
+            { q: 'Q24: Mean. [4]', m: 4, a: 'shown', e: 'Stats' },
+            { q: 'Q25: Graph. [4]', m: 4, a: 'shown', e: 'Plot' }
+        ]
+    },
+    {
+        id: 'p2fr', title: '📘 Paper 2FR', tier: 'Foundation', color: '#047857', code: 'P43073A — 20 May 2014', questions: [
+            { q: 'Q1: Pictogram. [4]', m: 4, a: 'shown', e: 'Data' },
+            { q: 'Q2: 3D. [3]', m: 3, a: 'shown', e: 'Shapes' },
+            { q: 'Q3: Std form. [2]', m: 2, a: '10,0.1', e: 'Powers of 10' },
+            { q: 'Q4: Spectators. [4]', m: 4, a: 'shown', e: 'Rounding/Mean' },
+            { q: 'Q5: Machine. [5]', m: 5, a: '23,-2,y=4x+3', e: 'Functions' },
+            { q: 'Q6: Medals. [6]', m: 6, a: 'shown', e: 'Data' },
+            { q: 'Q7: Stamps change. [3]', m: 3, a: '0.28', e: '5 - 4.72' },
+            { q: 'Q8: Reflect. [4]', m: 4, a: 'shown', e: 'Transformations' },
+            { q: 'Q9: Temps. [4]', m: 4, a: 'shown', e: 'Directed numbers' },
+            { q: 'Q10: %, order. [4]', m: 4, a: '8,shown', e: 'Fractions/%' },
+            { q: 'Q11: Algebra, f=5p-4v. [8]', m: 8, a: '7x,15y,-32,2', e: 'Simplify/Substitute' },
+            { q: 'Q12: Gallons. [3]', m: 3, a: 'shown', e: 'Graph' },
+            { q: 'Q13: Angles. [5]', m: 5, a: 'shown', e: 'Parallel lines' },
+            { q: 'Q14: Train. [6]', m: 6, a: 'shown', e: 'Time/Speed' },
+            { q: 'Q15: Seq. [4]', m: 4, a: 'shown', e: 'Sequences' },
+            { q: 'Q16: Transform. [4]', m: 4, a: 'shown', e: 'Geometry' },
+            { q: 'Q17: Plate. [4]', m: 4, a: 'shown', e: 'Area' },
+            { q: 'Q18: Transform. [4]', m: 4, a: 'shown', e: 'Geometry' },
+            { q: 'Q19: Plate. [4]', m: 4, a: 'shown', e: 'Area' },
+            { q: 'Q20: Kim. [5]', m: 5, a: 'shown', e: 'Profit' },
+            { q: 'Q21: Dice. [3]', m: 3, a: 'shown', e: 'Probability' },
+            { q: 'Q22: Primes. [4]', m: 4, a: 'shown', e: 'Factors' },
+            { q: 'Q23: Hexagon. [4]', m: 4, a: 'shown', e: 'Angles' },
+            { q: 'Q24: Mortar. [4]', m: 4, a: 'shown', e: 'Ratio' }
+        ]
+    },
+    {
+        id: 'p3h', title: '📕 Paper 3H', tier: 'Higher', color: '#ea580c', code: 'P43028A — 14 May 2014', questions: [
+            { q: 'Q1: Calc. [3]', m: 3, a: '8.94', e: '104/11.7' },
+            { q: 'Q2: Frac. [2]', m: 2, a: 'shown', e: 'Division' },
+            { q: 'Q3: Transform. [4]', m: 4, a: 'shown', e: 'Rotation' },
+            { q: 'Q4: Algebra. [6]', m: 6, a: 'shown', e: 'Simplify' },
+            { q: 'Q5: PQ. [3]', m: 3, a: 'shown', e: 'Trig' },
+            { q: 'Q6: Scale. [2]', m: 2, a: 'shown', e: 'Drawing' },
+            { q: 'Q7: Sets. [3]', m: 3, a: 'shown', e: 'Venn' },
+            { q: 'Q8: Line. [5]', m: 5, a: 'shown', e: 'Inequalities' },
+            { q: 'Q9: Prism. [3]', m: 3, a: 'shown', e: 'TSA' },
+            { q: 'Q10: Zara. [4]', m: 4, a: '94', e: 'Mean' },
+            { q: 'Q11: Cum freq. [8]', m: 8, a: 'shown', e: 'Graph' },
+            { q: 'Q12: Savings. [6]', m: 6, a: '8%,120', e: '% increase/reverse' },
+            { q: 'Q13: Square circle. [4]', m: 4, a: '44.4', e: 'π*10√2' },
+            { q: 'Q14: Fencing calc. [8]', m: 8, a: 'shown', e: 'Calculus' },
+            { q: 'Q15: Hexagons. [3]', m: 3, a: 'shown', e: 'Area ratio' },
+            { q: 'Q16: Chords. [2]', m: 2, a: '6', e: '4*9=x²' },
+            { q: 'Q17: Subject. [4]', m: 4, a: 'x=y/(1-y)', e: 'Rearrange' },
+            { q: 'Q18: Trapezium. [3]', m: 3, a: 'shown', e: 'Surds' },
+            { q: 'Q19: Bounds. [3]', m: 3, a: 'shown', e: 'UB/LB' },
+            { q: 'Q20: Counters. [5]', m: 5, a: 'shown', e: 'Probability' },
+            { q: 'Q21: Functions. [8]', m: 8, a: 'shown', e: 'Composite/Inverse' },
+            { q: 'Q22: Sector. [7]', m: 7, a: 'shown', e: 'Trig/Area' },
+            { q: 'Q23: Rational. [5]', m: 5, a: 'x=0', e: 'Solve' }
+        ]
+    },
+    {
+        id: 'p3hr', title: '📕 Paper 3HR', tier: 'Higher', color: '#c2410c', code: 'P43074A — 14 May 2014', questions: [
+            { q: 'Q1: Approx. [4]', m: 4, a: 'shown', e: 'Estimation' },
+            { q: 'Q2: Sets. [4]', m: 4, a: 'shown', e: 'Venn' },
+            { q: 'Q3: Rect. [7]', m: 7, a: 'shown', e: 'Area/Pythag' },
+            { q: 'Q4: Hens. [7]', m: 7, a: 'shown', e: 'Stats' },
+            { q: 'Q5: Algebra. [4]', m: 4, a: 'shown', e: 'Expand' },
+            { q: 'Q6: Eq. [3]', m: 3, a: '8', e: 'Solve' },
+            { q: 'Q7: Petrol. [6]', m: 6, a: 'shown', e: '% change' },
+            { q: 'Q8: Graph. [4]', m: 4, a: 'shown', e: 'Plot' },
+            { q: 'Q9: Cyl. [3]', m: 3, a: 'shown', e: 'CSA' },
+            { q: 'Q10: Cum freq. [5]', m: 5, a: 'shown', e: 'Stats' },
+            { q: 'Q11: Functions. [8]', m: 8, a: 'shown', e: 'f(g(x))' },
+            { q: 'Q12: Similar. [8]', m: 8, a: 'shown', e: 'Scale factor' },
+            { q: 'Q13: Simul. [4]', m: 4, a: '2,0', e: 'Linear' },
+            { q: 'Q14: Calc. [7]', m: 7, a: 'shown', e: 'Derivative' },
+            { q: 'Q15: Hist. [3]', m: 3, a: 'shown', e: 'Freq density' },
+            { q: 'Q16: Surds. [5]', m: 5, a: 'shown', e: 'Expansion' },
+            { q: 'Q17: Coins. [5]', m: 5, a: 'shown', e: 'Probability' },
+            { q: 'Q18: Cuboid. [5]', m: 5, a: 'shown', e: '3D Pythag' },
+            { q: 'Q19: Ineq. [3]', m: 3, a: '-4<x<4', e: 'Solve' },
+            { q: 'Q20: Indices. [3]', m: 3, a: '3', e: '2^3n=64' },
+            { q: 'Q21: Vectors. [3]', m: 3, a: 'shown', e: 'Parallelogram' }
+        ]
+    }
+];
+
+function renderSidebar(){
+    const sb = document.getElementById('sidebar');
+    let html = '<div class="sidebar-title">📑 فهرس الأوراق</div>';
+    examData.forEach(p=>{
+        const bg = p.tier==='Higher' ? '#dc2626' : '#2563eb';
+        html += `<div class="sidebar-session" style="background:${bg};">${p.title} (${p.questions.length}Q)</div>`;
+        p.questions.forEach((q,i)=>{ html += `<a href="#${p.id}-q${i}" class="sidebar-link">Question ${i+1}</a>`; });
+    });
+    sb.innerHTML = html;
+}
+
+function renderExam(){
+    const c = document.getElementById('exam-content');
+    let html = '';
+    examData.forEach(p=>{
+        const tb = p.tier==='Higher' ? '<span class="tier-badge tier-higher">Higher</span>' : '<span class="tier-badge tier-foundation">Foundation</span>';
+        html += `<section id="${p.id}" class="page-break">
+            <div class="section-header" style="background:linear-gradient(135deg,${p.color},${p.color}cc);">
+                <h2><span class="paper-badge">📄 ${p.title}</span>${tb} <span style="opacity:0.8;font-size:0.8rem;">${p.code}</span> — ${p.questions.length} Questions</h2>
+            </div>`;
+        p.questions.forEach((q,i)=>{
+            const qId = `${p.id}-q${i}`;
+            html += `<div class="question-card" id="${qId}">
+                <p style="margin:0 0 6px;"><strong>Q${i+1}.</strong> ${q.q} <span class="marks-badge">${q.m} marks</span></p>
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px;">
+                    <input type="text" class="answer-input" data-answer="${q.a}" data-paper="${p.id}" placeholder="Answer" oninput="checkAnswer(this)">
+                    <button class="reveal-btn" onclick="toggleSubAnswer(this)">👁️</button>
+                </div>
+                <div class="answer-box hidden">✅ ${q.e}</div>
+            </div>`;
+        });
+        html += `</section>`;
+    });
+    c.innerHTML = html;
+}
+
+function renderPaperScores(){
+    const c = document.getElementById('paper-scores');
+    let html = '';
+    examData.forEach(p=>{
+        html += `<div class="flex justify-between items-center">
+            <span class="text-gray-700 text-xs">📄 ${p.title}</span>
+            <span id="score-${p.id}" class="font-bold text-emerald-600 text-xs">0/${p.questions.length}</span>
+        </div>`;
+    });
+    c.innerHTML = html;
+}
+
+function setLanguage(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang==='ar');
+    document.getElementById('btn-en').classList.toggle('active', lang==='en');
+    document.body.classList.toggle('en-mode', lang==='en');
+    document.querySelectorAll('[data-ar][data-en]').forEach(el=>{
+        el.innerHTML = lang==='ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    });
+}
+function toggleSubAnswer(btn){
+    const ab = btn.closest('.question-card').querySelector('.answer-box');
+    if(ab) ab.classList.toggle('hidden');
+}
+function toggleAllAnswers(){
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el=>el.classList.toggle('hidden', !answersVisible));
+}
+function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+function collapseAll(){ document.querySelectorAll('.answer-box').forEach(b=>b.classList.add('hidden')); }
+function expandAll(){ document.querySelectorAll('.answer-box').forEach(b=>b.classList.remove('hidden')); }
+
+function normalize(s){ return s.toLowerCase().replace(/\s+/g,'').replace(/[×*]/g,'').replace(/[−]/g,'-'); }
+function checkAnswer(input){
+    const correct = input.dataset.answer;
+    const user = input.value.trim();
+    const card = input.closest('.question-card');
+    if(!correct || correct==='shown' || !user){ card.classList.remove('correct','incorrect'); updateProgress(); return; }
+    const cn = normalize(correct); const un = normalize(user);
+    if(un===cn || un.includes(cn) || cn.includes(un)){ card.classList.add('correct'); card.classList.remove('incorrect'); }
+    else { card.classList.add('incorrect'); card.classList.remove('correct'); }
+    updateProgress();
+}
+function updateProgress(){
+    const inputs = document.querySelectorAll('.answer-input');
+    let answered = 0;
+    inputs.forEach(i=>{ if(i.value.trim()) answered++; });
+    const pct = inputs.length>0 ? Math.round(answered/inputs.length*100) : 0;
+    document.getElementById('progressBar').style.width = pct+'%';
+    document.getElementById('progressText').textContent = pct+'%';
+}
+
+function gradeExam(){
+    const paperScores = {};
+    examData.forEach(p=>{ paperScores[p.id] = {c:0, t:p.questions.length}; });
+    let totalCorrect = 0, totalQ = 0;
+    document.querySelectorAll('.answer-input').forEach(input=>{
+        totalQ++;
+        const pid = input.dataset.paper;
+        const correct = input.dataset.answer;
+        const user = input.value.trim();
+        const card = input.closest('.question-card');
+        if(correct && correct!=='shown' && user){
+            const cn = normalize(correct); const un = normalize(user);
+            if(un===cn || un.includes(cn) || cn.includes(un)){
+                totalCorrect++;
+                if(paperScores[pid]) paperScores[pid].c++;
+                if(card){ card.classList.add('correct'); card.classList.remove('incorrect'); }
+            } else {
+                if(card){ card.classList.add('incorrect'); card.classList.remove('correct'); }
+            }
+        }
+    });
+    const score = totalQ>0 ? Math.round(totalCorrect/totalQ*100) : 0;
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || 'Student';
+    document.getElementById('res-date').textContent = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    document.getElementById('res-total').textContent = `${totalCorrect} / ${totalQ}`;
+    document.getElementById('success-percent').textContent = score+'%';
+    examData.forEach(p=>{
+        const el = document.getElementById(`score-${p.id}`);
+        if(el && paperScores[p.id]) el.textContent = `${paperScores[p.id].c}/${paperScores[p.id].t}`;
+    });
+    const badge = document.getElementById('success-badge');
+    if(score>=90){ badge.textContent='ممتاز'; badge.className='success-badge grade-excellent'; }
+    else if(score>=75){ badge.textContent='جيد جداً'; badge.className='success-badge grade-good'; }
+    else if(score>=50){ badge.textContent='جيد'; badge.className='success-badge grade-pass'; }
+    else { badge.textContent='يحتاج تحسين'; badge.className='success-badge grade-fail'; }
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({behavior:'smooth'});
+}
+
+function startTimer(){
+    setInterval(()=>{
+        timeRemaining--;
+        const m = Math.floor(timeRemaining/60);
+        const s = timeRemaining%60;
+        const el = document.getElementById('timer');
+        el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        if(timeRemaining<=300) el.classList.add('timer-warning');
+        if(timeRemaining<=0){ alert(currentLang==='ar' ? 'انتهى الوقت!' : "Time's up!"); gradeExam(); }
+    }, 1000);
+}
+
+document.addEventListener('click', function(e){
+    if(e.target.matches('a[href^="#"]')){
+        e.preventDefault();
+        const t = document.querySelector(e.target.getAttribute('href'));
+        if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+});
+
+window.addEventListener('DOMContentLoaded', ()=>{
+    renderSidebar();
+    renderExam();
+    renderPaperScores();
+    startTimer();
+    updateProgress();
+});
+</script>
+</body>
+</html>
